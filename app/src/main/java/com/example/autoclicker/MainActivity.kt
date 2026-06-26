@@ -4,12 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.autoclicker.databinding.ActivityMainBinding
 import com.google.android.material.chip.Chip
 
@@ -42,29 +44,40 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateServiceStatus()
+
         val filter = IntentFilter().apply {
             addAction(AutoClickerService.ACTION_SERVICE_CONNECTED)
             addAction(AutoClickerService.ACTION_SERVICE_DISCONNECTED)
         }
-        registerReceiver(serviceReceiver, filter)
+
+        // Android 13+ (API 33) requires explicit exported flag on registerReceiver
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(serviceReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(serviceReceiver, filter)
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(serviceReceiver)
+        try {
+            unregisterReceiver(serviceReceiver)
+        } catch (_: IllegalArgumentException) {
+            // Receiver was never registered — safe to ignore
+        }
     }
 
     private fun updateServiceStatus() {
         val enabled = isAccessibilityServiceEnabled()
         if (enabled) {
             binding.tvStatus.text = getString(R.string.status_active)
-            binding.tvStatus.setTextColor(getColor(R.color.status_active))
-            binding.statusIndicator.setBackgroundColor(getColor(R.color.status_active))
+            binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+            binding.statusIndicator.setBackgroundColor(ContextCompat.getColor(this, R.color.status_active))
             binding.btnOpenSettings.text = getString(R.string.btn_manage_service)
         } else {
             binding.tvStatus.text = getString(R.string.status_inactive)
-            binding.tvStatus.setTextColor(getColor(R.color.status_inactive))
-            binding.statusIndicator.setBackgroundColor(getColor(R.color.status_inactive))
+            binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.status_inactive))
+            binding.statusIndicator.setBackgroundColor(ContextCompat.getColor(this, R.color.status_inactive))
             binding.btnOpenSettings.text = getString(R.string.btn_enable_service)
         }
     }
