@@ -21,14 +21,14 @@ name: Build APK
             java-version: '17'
             distribution: 'temurin'
 
-        - name: Set up Android SDK
+        - name: Setup Android SDK
           uses: android-actions/setup-android@v3
 
-        - name: Grant execute permission to gradlew
+        - name: Make gradlew executable
           run: chmod +x gradlew
 
         - name: Build debug APK
-          run: ./gradlew assembleDebug --stacktrace
+          run: ./gradlew assembleDebug --no-daemon --stacktrace
 
         - name: Upload APK artifact
           uses: actions/upload-artifact@v4
