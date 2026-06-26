@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Clicker Helper</string>
+    <string name="app_subtitle">Jeeny Driver Auto-Accept</string>
+    <string name="service_status_label">Service Status</string>
+    <string name="status_active">Active ✓</string>
+    <string name="status_inactive">Inactive</string>
+    <string name="btn_enable_service">Enable Accessibility Service</string>
+    <string name="btn_manage_service">Manage Service</string>
+    <string name="keywords_label">Monitored Keywords</string>
+    <string name="btn_add">+ Add</string>
+    <string name="keyword_hint">Enter keyword…</string>
+    <string name="dialog_add_keyword_title">Add Keyword</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="info_title">How it works</string>
+    <string name="info_body">When the Jeeny Driver app is open, this service monitors the screen for the keywords listed above. When detected, it automatically taps the corresponding button.\n\nTo enable: tap the button above → find \"Smart Clicker Helper\" → toggle it on.</string>
+    <string name="accessibility_service_description">Monitors the Jeeny Driver app and automatically accepts ride offers by tapping matching keywords.</string>
+</resources>
